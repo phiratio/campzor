@@ -1,0 +1,46 @@
+var mongoose = require("mongoose");
+var Campground = require("./models/campground.js");
+var moment = require("moment");
+var Comment = require("./models/comment.js");
+var data = [{
+    name: "Cloud's rest",
+    image: "http://images.budgettravel.com/bucket-listalaskadenali-national-park-10172013-0651_horiz-large.jpeg",
+    description: "hiihihoajf"
+}, {
+    name: "Rila Mountain",
+    image: "http://images.budgettravel.com/bucket-listalaskahorseshoe-lake-10172013-0131_horiz-large.jpeg",
+    description: "aidhsaoida"
+}, {
+    name: "Pirin",
+    image: "http://images.budgettravel.com/dreamtripsdenalimountains-4162013-14342_horiz-large.jpeg",
+    description: "aihdoisahd"
+}];
+
+function seedDB() {
+    Campground.remove({}, function (err, res) {
+        if (err) {
+            console.log("something went wrong");
+        }
+        console.log(`${moment().add(2, 'h').format('HH:mm:ss')} removed campgrounds`);
+			data.forEach(function(data){
+            Campground.create(data, function (err, campgroundData) {
+                if (err) {
+                    console.log("error,shit");
+                }
+                else {
+                    console.log("added campground");
+                    Comment.create({
+                        text: "this place was great but i wish there was net",
+                        author: "homie"
+                    }, function (err, comment) {
+                        campgroundData.comments.push(comment);
+                        campgroundData.save();
+                        console.log("created new comment");
+                    })
+                }
+            });
+        });
+    });
+}
+
+    module.exports = seedDB;
