@@ -20,7 +20,7 @@ var commentRoutes = require("./routes/comments"),
 
 //for local dev purposes
 console.log(process.env.DATABASEURL);
-mongoose.connect(process.env.DATABASEURL);
+mongoose.connect(process.env.DATABASEURL || "mongodb://localhost/yelp_camp" );
 //mongoose.connect("mongodb://admin:admin@ds127300.mlab.com:27300/bojodb");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");

@@ -2,7 +2,8 @@ var express = require("express"),
 router      = express.Router({mergeParams: true}),
 Campground  = require("../models/campground.js"),
 Comment     = require("../models/comment.js"),
-middleware  = require("../middleware");
+middleware  = require("../middleware"),
+moment      = require("moment");
 
 //SHOW COMMENTS
 router.get("/campgrounds/:id/comments/new", middleware.isLoggedIn, function(req, res){
@@ -13,7 +14,7 @@ router.get("/campgrounds/:id/comments/new", middleware.isLoggedIn, function(req,
         }else {
             res.render("comments/new",{campground: campground});
         }
-    })
+    });
 });
 
 //POST COMMENT
@@ -32,6 +33,7 @@ router.post("/campgrounds/:id/comments", middleware.isLoggedIn, function(req, re
                     // add username and id to comment tip. see the schema
                     comment.author.id = req.user._id;
                     comment.author.username = req.user.username;
+                    comment.time = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
                     comment.save();
                     campground.comments.push(comment);
                     campground.save();
